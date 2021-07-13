@@ -5,8 +5,6 @@ import 'package:bloc/bloc.dart';
 import 'package:graphql/client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-//Importo anime_tab_screen para usar la query definida ahi, todo cambiar esa consulta a otro archivo
-import 'package:actividad_05/screens/home/anime_tab_screen.dart';
 import 'package:actividad_05/bloc/list_animes_favs/list_animes_favs_events.dart';
 import 'package:actividad_05/bloc/list_animes_favs/list_animes_favs_state.dart';
 
