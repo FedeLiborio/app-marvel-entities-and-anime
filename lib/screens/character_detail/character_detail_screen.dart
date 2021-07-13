@@ -1,3 +1,5 @@
+import 'package:actividad_05/bloc/list_characters_favs/list_characters_favs_bloc.dart';
+import 'package:actividad_05/bloc/list_characters_favs/list_characters_favs_events.dart';
 import 'package:actividad_05/models/character.dart';
 import 'package:actividad_05/models/thumbnail.dart';
 import 'package:actividad_05/screens/character_detail/character_releated_content.dart';
@@ -7,6 +9,7 @@ import 'package:actividad_05/widgets/attribution.dart';
 import 'package:actividad_05/widgets/detail_hero_with_back_btn.dart';
 import 'package:actividad_05/widgets/labeled_image_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
@@ -46,6 +49,8 @@ class _CharacterDetailScreenState extends State<CharacterDetailScreen> {
   }
 
   toggleFavourite(int characterId) => () async {
+        final listCharactersFavBloc = BlocProvider.of<ListCharactersFavBloc>(context);
+
         setState(() {
           if (favouritedCharacterIds.indexOf(characterId) >= 0) {
             favouritedCharacterIds.remove(characterId);
@@ -72,6 +77,7 @@ class _CharacterDetailScreenState extends State<CharacterDetailScreen> {
 
           await prefs.setString(
               'favouriteCharacters', json.encode(favouriteCharactersIds));
+          listCharactersFavBloc.add(ListCharactersFavShow());
         } catch (e) {
           print('Err $e');
           SharedPreferences.setMockInitialValues({});
@@ -125,6 +131,9 @@ class _CharacterDetailScreenState extends State<CharacterDetailScreen> {
                 iconSize: 40.0,
                 color: Colors.black,
               ),
+              // Se comentó estas lineas para no confundir, pero el metodo al
+              // que llama funciona perfectamente.
+              /*
               IconButton(
                 onPressed:
                     toggleFavouriteSqlite(character != null ? character : null),
@@ -136,6 +145,7 @@ class _CharacterDetailScreenState extends State<CharacterDetailScreen> {
                 iconSize: 40.0,
                 color: Colors.black,
               ),
+               */
               IconButton(
                 onPressed: () => print('Share'),
                 icon: Icon(Icons.share),

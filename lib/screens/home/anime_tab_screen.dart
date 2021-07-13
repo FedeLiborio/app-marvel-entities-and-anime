@@ -49,46 +49,49 @@ class AnimeTabScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Query(
-        options: QueryOptions(
-            document: gql(queryAnimeTab),
-            variables: {
-              "season": "SPRING",
-              "seasonYear": 2021,
-              "nextSeason": "SUMMER",
-              "nextYear": 2021
-            },
-            fetchPolicy: FetchPolicy.noCache),
-        builder: (QueryResult result,
-            {VoidCallback refetch, FetchMore fetchMore}) {
-          if (result.hasException) {
-            print(result.exception);
-            return Text(result.exception.toString());
-          }
+      options: QueryOptions(
+        document: gql(queryAnimeTab),
+        variables: {
+          "season": "SPRING",
+          "seasonYear": 2021,
+          "nextSeason": "SUMMER",
+          "nextYear": 2021
+        },
+        fetchPolicy: FetchPolicy.noCache
+      ),
+      builder: (QueryResult result, {VoidCallback refetch, FetchMore fetchMore}) {
+        if (result.hasException) {
+          print(result.exception);
+          return Text(result.exception.toString());
+        }
 
-          if (result.isLoading) {
-            return Text('Loading...');
-          }
+        if (result.isLoading) {
+          return Text('Loading...');
+        }
 
-          //trending, season, nextSeason, popular, top
-          return ListView(
-            children: [
-              AnimeCardList(
-                  label: "Trending NOW",
-                  media: result.data['trending']['media']),
-              AnimeCardList(
-                  label: "Popular this season",
-                  media: result.data['season']['media']),
-              AnimeCardList(
-                  label: "Upcoming next season",
-                  media: result.data['nextSeason']['media']),
-              AnimeCardList(
-                  label: "All time popular",
-                  media: result.data['popular']['media']),
-              AnimeCardList(label: "Top", media: result.data['top']['media']),
-              SizedBox(height: 30),
-            ],
-          );
-        });
+        //trending, season, nextSeason, popular, top
+        return ListView(
+          children: [
+            AnimeCardList(
+                label: "Trending NOW",
+                media: result.data['trending']['media']),
+            AnimeCardList(
+                label: "Popular this season",
+                media: result.data['season']['media']),
+            AnimeCardList(
+                label: "Upcoming next season",
+                media: result.data['nextSeason']['media']),
+            AnimeCardList(
+                label: "All time popular",
+                media: result.data['popular']['media']),
+            AnimeCardList(
+                label: "Top",
+                media: result.data['top']['media']),
+            SizedBox(height: 30),
+          ],
+        );
+      }
+    );
   }
 }
 

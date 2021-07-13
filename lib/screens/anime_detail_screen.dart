@@ -1,8 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
+
+import 'package:actividad_05/bloc/list_animes_favs/list_animes_favs_bloc.dart';
+import 'package:actividad_05/bloc/list_animes_favs/list_animes_favs_events.dart';
 
 final ANIME_DETAIL_QUERY = r"""
 query media($id: Int, $type: MediaType, $isAdult: Boolean) {
@@ -240,7 +246,9 @@ class _AnimeDetailScreenState extends State<AnimeDetailScreen> {
   List<dynamic> favouritedAnimeIds = [];
 
   toggleFavourite(int animeId) => () async {
-        setState(() {
+    final listAnimesFavBloc = BlocProvider.of<ListAnimesFavBloc>(context);
+
+    setState(() {
           if (favouritedAnimeIds.indexOf(animeId) >= 0) {
             favouritedAnimeIds.remove(animeId);
           } else {
@@ -264,6 +272,7 @@ class _AnimeDetailScreenState extends State<AnimeDetailScreen> {
 
           await prefs.setString(
               'favouriteAnimes', json.encode(favouriteAnimesIds));
+          listAnimesFavBloc.add(ListAnimesFavShow());
         } catch (e) {
           print('Err $e');
           SharedPreferences.setMockInitialValues({});
